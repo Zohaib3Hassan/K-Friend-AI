@@ -8,77 +8,427 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-# ─── Custom CSS ────────────────────────────────────────────────
+# ─── Premium Custom CSS ───────────────────────────────────────
 st.markdown("""
 <style>
-    /* Main header styling */
-    .main-header {
-        text-align: center;
-        padding: 1rem 0 0.5rem 0;
-    }
-    .main-header h1 {
-        color: #0F6E56;
-        font-size: 2.2rem;
-        margin-bottom: 0.2rem;
-    }
-    .main-header p {
-        color: #666;
-        font-size: 1rem;
-    }
-    /* Chat message styling */
-    .stChatMessage {
-        border-radius: 12px;
-    }
-    /* Sidebar styling */
-    [data-testid="stSidebar"] {
-        background-color: #f8fffe;
-    }
-    /* Tab styling */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-    }
-    .stTabs [data-baseweb="tab"] {
-        padding: 10px 20px;
-        border-radius: 8px 8px 0 0;
-    }
+/* ── Import Google Fonts ── */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+
+/* ── Global Reset ── */
+*, *::before, *::after { font-family: 'Plus Jakarta Sans', sans-serif !important; }
+
+/* ── Root Variables ── */
+:root {
+    --primary: #0D9373;
+    --primary-light: #E8F5F0;
+    --primary-dark: #065F4A;
+    --accent: #FF6B35;
+    --bg-main: #F7F9FC;
+    --bg-card: #FFFFFF;
+    --bg-sidebar: #0B1F1A;
+    --text-primary: #1A1D23;
+    --text-secondary: #6B7280;
+    --text-muted: #9CA3AF;
+    --border: #E5E7EB;
+    --border-light: #F0F2F5;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 30px rgba(0,0,0,0.12);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+}
+
+/* ── Main Background ── */
+.stApp, [data-testid="stAppViewContainer"] {
+    background: var(--bg-main) !important;
+}
+.main .block-container {
+    max-width: 1100px;
+    padding: 1rem 2rem 3rem 2rem;
+}
+
+/* ── Sidebar ── */
+[data-testid="stSidebar"] {
+    background: linear-gradient(180deg, #0B1F1A 0%, #0F2E25 50%, #0B1F1A 100%) !important;
+}
+[data-testid="stSidebar"] * {
+    color: #E0E8E5 !important;
+}
+[data-testid="stSidebar"] .stTextInput label,
+[data-testid="stSidebar"] .stTextInput input {
+    color: #E0E8E5 !important;
+}
+[data-testid="stSidebar"] .stTextInput input {
+    background: rgba(255,255,255,0.08) !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+    border-radius: var(--radius-sm) !important;
+}
+[data-testid="stSidebar"] .stTextInput input:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 2px rgba(13,147,115,0.25) !important;
+}
+[data-testid="stSidebar"] hr {
+    border-color: rgba(255,255,255,0.1) !important;
+}
+
+/* ── Tab Styling ── */
+.stTabs [data-baseweb="tab-list"] {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 6px;
+    gap: 4px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+}
+.stTabs [data-baseweb="tab"] {
+    border-radius: var(--radius-md) !important;
+    padding: 12px 24px !important;
+    font-weight: 600 !important;
+    font-size: 0.9rem !important;
+    color: var(--text-secondary) !important;
+    transition: all 0.2s ease !important;
+}
+.stTabs [data-baseweb="tab"]:hover {
+    background: var(--primary-light) !important;
+    color: var(--primary-dark) !important;
+}
+.stTabs [aria-selected="true"] {
+    background: var(--primary) !important;
+    color: white !important;
+}
+.stTabs [data-baseweb="tab-highlight"] {
+    display: none !important;
+}
+.stTabs [data-baseweb="tab-border"] {
+    display: none !important;
+}
+
+/* ── Card Style ── */
+.card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border-light);
+    margin-bottom: 1rem;
+    transition: box-shadow 0.2s ease;
+}
+.card:hover {
+    box-shadow: var(--shadow-md);
+}
+
+/* ── Buttons ── */
+.stButton > button {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%) !important;
+    color: white !important;
+    border: none !important;
+    border-radius: var(--radius-md) !important;
+    padding: 0.7rem 1.5rem !important;
+    font-weight: 600 !important;
+    font-size: 0.95rem !important;
+    transition: all 0.25s ease !important;
+    box-shadow: 0 2px 8px rgba(13,147,115,0.3) !important;
+    letter-spacing: 0.01em !important;
+}
+.stButton > button:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 16px rgba(13,147,115,0.4) !important;
+}
+.stButton > button:active {
+    transform: translateY(0px) !important;
+}
+
+/* ── Input Fields ── */
+.stTextInput input, .stTextArea textarea, .stNumberInput input, .stSelectbox > div > div {
+    border-radius: var(--radius-sm) !important;
+    border: 1.5px solid var(--border) !important;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease !important;
+    font-size: 0.9rem !important;
+}
+.stTextInput input:focus, .stTextArea textarea:focus, .stNumberInput input:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(13,147,115,0.12) !important;
+}
+
+/* ── Chat Messages ── */
+[data-testid="stChatMessage"] {
+    background: var(--bg-card) !important;
+    border-radius: var(--radius-lg) !important;
+    border: 1px solid var(--border-light) !important;
+    box-shadow: var(--shadow-sm) !important;
+    padding: 1rem 1.2rem !important;
+    margin-bottom: 0.75rem !important;
+}
+
+/* ── Chat Input ── */
+[data-testid="stChatInput"] {
+    border-radius: var(--radius-lg) !important;
+}
+[data-testid="stChatInput"] textarea {
+    border-radius: var(--radius-lg) !important;
+    border: 2px solid var(--border) !important;
+    padding: 1rem !important;
+    font-size: 0.95rem !important;
+}
+[data-testid="stChatInput"] textarea:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(13,147,115,0.12) !important;
+}
+
+/* ── Expander ── */
+.streamlit-expanderHeader {
+    background: var(--bg-card) !important;
+    border-radius: var(--radius-md) !important;
+    border: 1px solid var(--border-light) !important;
+    font-weight: 600 !important;
+}
+
+/* ── Metrics / Number Input ── */
+.stNumberInput > div > div > input {
+    text-align: center !important;
+    font-weight: 600 !important;
+}
+
+/* ── Radio / Checkbox ── */
+.stRadio > div, .stCheckbox > label {
+    font-weight: 500 !important;
+}
+
+/* ── Multiselect pills ── */
+[data-baseweb="tag"] {
+    background: var(--primary-light) !important;
+    color: var(--primary-dark) !important;
+    border-radius: 20px !important;
+    font-weight: 500 !important;
+}
+
+/* ── Success/Error/Warning ── */
+.stSuccess { border-radius: var(--radius-md) !important; }
+.stError { border-radius: var(--radius-md) !important; }
+.stWarning { border-radius: var(--radius-md) !important; }
+
+/* ── Spinner ── */
+.stSpinner > div { color: var(--primary) !important; }
+
+/* ── Hero Header ── */
+.hero {
+    text-align: center;
+    padding: 2rem 1rem 1.5rem 1rem;
+    margin-bottom: 1rem;
+}
+.hero-badge {
+    display: inline-block;
+    background: var(--primary-light);
+    color: var(--primary-dark);
+    font-size: 0.75rem;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+}
+.hero h1 {
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin: 0.3rem 0;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+.hero h1 .highlight {
+    background: linear-gradient(135deg, var(--primary), #14B88E);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+.hero p {
+    color: var(--text-secondary);
+    font-size: 1.05rem;
+    margin-top: 0.5rem;
+    font-weight: 400;
+    line-height: 1.6;
+}
+
+/* ── Quick Action Cards ── */
+.quick-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 1rem;
+}
+.quick-card {
+    background: var(--bg-card);
+    border: 1.5px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 0.9rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+}
+.quick-card:hover {
+    border-color: var(--primary);
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+}
+.quick-card .emoji { font-size: 1.3rem; margin-bottom: 0.3rem; }
+.quick-card .title { font-size: 0.82rem; font-weight: 600; color: var(--text-primary); line-height: 1.4; }
+
+/* ── Feature Pill ── */
+.feature-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin: 3px;
+}
+
+/* ── Section Label ── */
+.section-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    margin-bottom: 0.8rem;
+}
+
+/* ── Translator Result Box ── */
+.result-box {
+    background: linear-gradient(135deg, var(--primary-light) 0%, #F0FBF7 100%);
+    border: 1px solid #C6E8DA;
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-top: 1rem;
+}
+
+/* ── Phrase Card ── */
+.phrase-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.7rem 0;
+    border-bottom: 1px solid var(--border-light);
+}
+.phrase-row:last-child { border-bottom: none; }
+.phrase-kr { font-weight: 600; color: var(--text-primary); font-size: 0.9rem; }
+.phrase-en { color: var(--text-secondary); font-size: 0.85rem; }
+
+/* ── Stat Card ── */
+.stat-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 1rem;
+}
+.stat-card {
+    flex: 1;
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1rem;
+    text-align: center;
+}
+.stat-card .num { font-size: 1.4rem; font-weight: 700; color: var(--primary); }
+.stat-card .label { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+/* ── Hide Streamlit defaults ── */
+#MainMenu { visibility: hidden; }
+header { visibility: hidden; }
+footer { visibility: hidden; }
+
+/* ── Responsive ── */
+@media (max-width: 768px) {
+    .hero h1 { font-size: 1.8rem; }
+    .quick-grid { grid-template-columns: 1fr; }
+    .stat-row { flex-direction: column; }
+    .main .block-container { padding: 0.5rem 1rem 2rem 1rem; }
+}
 </style>
 """, unsafe_allow_html=True)
 
 # ─── Sidebar ───────────────────────────────────────────────────
 with st.sidebar:
-    st.image("https://img.icons8.com/color/96/south-korea.png", width=60)
-    st.title("K-Friend AI")
-    st.caption("Smart Life Assistant for Foreigners in South Korea")
+    st.markdown("""
+    <div style="text-align:center; padding: 1.5rem 0 0.5rem 0;">
+        <div style="font-size: 2.5rem; margin-bottom: 0.3rem;">🇰🇷</div>
+        <div style="font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em;">K-Friend AI</div>
+        <div style="font-size: 0.75rem; color: rgba(255,255,255,0.5); margin-top: 4px; letter-spacing: 0.05em; text-transform: uppercase;">Smart Life Assistant</div>
+    </div>
+    """, unsafe_allow_html=True)
     st.divider()
 
-    # API Key input
     groq_api_key = st.text_input(
         "🔑 Groq API Key",
         type="password",
-        help="Get your free key at https://console.groq.com/keys",
+        help="Get your free key at console.groq.com/keys",
+        placeholder="gsk_...",
     )
 
-    st.divider()
-    st.markdown("**Modules**")
-    st.markdown("1. 💬 K-Friend Chat")
-    st.markdown("2. 🌐 Translator")
-    st.markdown("3. 🛒 Grocery Planner")
-    st.divider()
-    st.caption("Built by Shah Zohaib Hassan · KDU Global · 2026")
+    if groq_api_key:
+        st.success("✓ API key set", icon="✅")
+    else:
+        st.info("Enter your free Groq API key to start", icon="🔑")
 
-# ─── Header ────────────────────────────────────────────────────
+    st.divider()
+
+    st.markdown("""
+    <div style="padding: 0 0.2rem;">
+        <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: rgba(255,255,255,0.35); margin-bottom: 12px;">Modules</div>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: rgba(13,147,115,0.15); border-radius: 8px; border: 1px solid rgba(13,147,115,0.2);">
+                <span style="font-size: 1.1rem;">💬</span>
+                <span style="font-size: 0.85rem; font-weight: 600;">K-Friend Chat</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                <span style="font-size: 1.1rem;">🌐</span>
+                <span style="font-size: 0.85rem; font-weight: 500;">Translator</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                <span style="font-size: 1.1rem;">🛒</span>
+                <span style="font-size: 0.85rem; font-weight: 500;">Grocery Planner</span>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.divider()
+    st.markdown("""
+    <div style="text-align: center; padding: 0.5rem 0;">
+        <div style="font-size: 0.7rem; color: rgba(255,255,255,0.3);">Built by Shah Zohaib Hassan</div>
+        <div style="font-size: 0.65rem; color: rgba(255,255,255,0.2); margin-top: 2px;">KDU Global · AI Department · 2026</div>
+    </div>
+    """, unsafe_allow_html=True)
+
+
+# ─── Hero Header ───────────────────────────────────────────────
 st.markdown("""
-<div class="main-header">
-    <h1>🇰🇷 K-Friend AI</h1>
-    <p>Your Smart Life Assistant for Living in South Korea</p>
+<div class="hero">
+    <div class="hero-badge">🇰🇷 AI-Powered Assistant</div>
+    <h1>Meet your <span class="highlight">K-Friend</span></h1>
+    <p>Navigate life in South Korea with confidence. Get instant answers about<br>visas, translate anything, and plan groceries — all in one place.</p>
+    <div style="margin-top: 1rem;">
+        <span class="feature-pill">💬 Chatbot</span>
+        <span class="feature-pill">🌐 Translation</span>
+        <span class="feature-pill">🛒 Grocery Planning</span>
+        <span class="feature-pill">🇰🇷 Korea Expert</span>
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
+
 # ─── Tabs ──────────────────────────────────────────────────────
 tab_chat, tab_translate, tab_grocery = st.tabs([
-    "💬 K-Friend Chat",
-    "🌐 Translator",
-    "🛒 Grocery Planner",
+    "💬  K-Friend Chat",
+    "🌐  Translator",
+    "🛒  Grocery Planner",
 ])
 
 
@@ -108,7 +458,7 @@ Guidelines:
 """
 
 with tab_chat:
-    st.markdown("##### Ask me anything about life in Korea! 🇰🇷")
+    st.markdown('<div class="section-label">Ask anything about life in Korea</div>', unsafe_allow_html=True)
 
     # Initialize chat history
     if "chat_messages" not in st.session_state:
@@ -120,28 +470,24 @@ with tab_chat:
             st.markdown(message["content"])
 
     # Chat input
-    if prompt := st.chat_input("e.g. How do I open a bank account in Korea?"):
+    if prompt := st.chat_input("Ask me anything — visas, banking, food, transport..."):
         if not groq_api_key:
             st.error("⚠️ Please enter your Groq API key in the sidebar to use the chatbot.")
         else:
-            # Add user message
             st.session_state.chat_messages.append({"role": "user", "content": prompt})
             with st.chat_message("user"):
                 st.markdown(prompt)
 
-            # Generate response
             with st.chat_message("assistant"):
                 with st.spinner("Thinking..."):
                     try:
                         from groq import Groq
-
                         client = Groq(api_key=groq_api_key)
                         messages = [{"role": "system", "content": SYSTEM_PROMPT}]
                         messages += [
                             {"role": m["role"], "content": m["content"]}
                             for m in st.session_state.chat_messages
                         ]
-
                         response = client.chat.completions.create(
                             model="llama-3.3-70b-versatile",
                             messages=messages,
@@ -156,62 +502,99 @@ with tab_chat:
                     except Exception as e:
                         st.error(f"Error: {e}")
 
-    # Quick question buttons
+    # Quick questions — only show when no chat history
     if not st.session_state.chat_messages:
-        st.markdown("---")
-        st.markdown("**Try asking:**")
+        st.markdown("""
+        <div class="quick-grid">
+            <div class="quick-card">
+                <div class="emoji">🏦</div>
+                <div class="title">How do I open a bank account?</div>
+            </div>
+            <div class="quick-card">
+                <div class="emoji">📋</div>
+                <div class="title">D-2 visa renewal process?</div>
+            </div>
+            <div class="quick-card">
+                <div class="emoji">🏥</div>
+                <div class="title">How does health insurance work?</div>
+            </div>
+            <div class="quick-card">
+                <div class="emoji">🍗</div>
+                <div class="title">Halal food options near me?</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        # Actual clickable buttons (styled to match)
         cols = st.columns(2)
-        quick_questions = [
-            "How do I open a bank account?",
+        quick_qs = [
+            "How do I open a bank account in Korea?",
             "What's the D-2 visa renewal process?",
-            "How does the health insurance work?",
-            "Best halal restaurants near universities?",
+            "How does health insurance work for students?",
+            "Where can I find halal food in Korea?",
         ]
-        for i, q in enumerate(quick_questions):
+        for i, q in enumerate(quick_qs):
             with cols[i % 2]:
-                if st.button(f"💡 {q}", key=f"quick_{i}", use_container_width=True):
+                if st.button(q, key=f"q_{i}", use_container_width=True):
                     st.session_state.chat_messages.append({"role": "user", "content": q})
                     st.rerun()
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# MODULE 2: EN ↔ KO TRANSLATOR
+# MODULE 2: TRANSLATOR
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 with tab_translate:
-    st.markdown("##### Translate between English and Korean 🌐")
+    st.markdown('<div class="section-label">English ↔ Korean Translation</div>', unsafe_allow_html=True)
 
-    col_left, col_right = st.columns(2)
+    # Stats row
+    st.markdown("""
+    <div class="stat-row">
+        <div class="stat-card">
+            <div class="num">🌐</div>
+            <div class="label">Powered by Llama 3.3</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">✨</div>
+            <div class="label">Polite Mode (존댓말)</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">📝</div>
+            <div class="label">Cultural Notes</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    col_left, col_right = st.columns([1, 1])
 
     with col_left:
         direction = st.radio(
-            "Translation Direction",
+            "Direction",
             ["English → Korean", "Korean → English"],
             horizontal=True,
         )
 
     with col_right:
         polite_mode = st.checkbox(
-            "✨ Polite/Formal mode (존댓말)",
+            "✨ Polite / Formal mode (존댓말)",
             value=True,
-            help="Rewrites Korean output in polite/formal speech level",
+            help="Outputs Korean in polite/formal speech level",
         )
 
     text_input = st.text_area(
-        "Enter text to translate:",
-        height=120,
+        "Enter text to translate",
+        height=130,
         placeholder="Type or paste your text here...",
     )
 
-    if st.button("🔄 Translate", type="primary", use_container_width=True):
+    if st.button("🔄  Translate", type="primary", use_container_width=True, key="translate_btn"):
         if not text_input.strip():
-            st.warning("Please enter some text to translate.")
+            st.warning("Please enter some text.")
         elif not groq_api_key:
             st.error("⚠️ Please enter your Groq API key in the sidebar.")
         else:
             with st.spinner("Translating..."):
                 try:
                     from groq import Groq
-
                     client = Groq(api_key=groq_api_key)
 
                     if direction == "English → Korean":
@@ -222,10 +605,8 @@ Text: {text_input}
 
 Provide:
 1. **Translation**: The Korean translation
-2. **Romanization**: The romanized pronunciation  
-3. **Notes**: Any cultural context or usage tips (1-2 sentences max)
-
-Format your response clearly with these three sections."""
+2. **Romanization**: The romanized pronunciation
+3. **Notes**: Any cultural context or usage tips (1-2 sentences max)"""
                     else:
                         translate_prompt = f"""Translate the following Korean text to English.
 
@@ -234,51 +615,72 @@ Text: {text_input}
 Provide:
 1. **Translation**: The English translation
 2. **Original speech level**: Whether the Korean uses formal (존댓말) or casual (반말) speech
-3. **Notes**: Any cultural context or nuance that doesn't directly translate (1-2 sentences max)
-
-Format your response clearly with these three sections."""
+3. **Notes**: Any cultural context or nuance (1-2 sentences max)"""
 
                     response = client.chat.completions.create(
                         model="llama-3.3-70b-versatile",
                         messages=[
-                            {
-                                "role": "system",
-                                "content": "You are an expert Korean-English translator. Provide accurate, natural translations with helpful cultural context.",
-                            },
+                            {"role": "system", "content": "You are an expert Korean-English translator. Provide accurate, natural translations with helpful cultural context."},
                             {"role": "user", "content": translate_prompt},
                         ],
                         temperature=0.3,
                         max_tokens=512,
                     )
                     result = response.choices[0].message.content
-                    st.success("Translation complete!")
+                    st.markdown(f'<div class="result-box">{result}</div>', unsafe_allow_html=True)
                     st.markdown(result)
                 except Exception as e:
                     st.error(f"Translation error: {e}")
 
-    # Common phrases section
+    # Essential Phrases
     with st.expander("📚 Essential Korean Phrases for Daily Life"):
-        phrases = {
-            "안녕하세요 (annyeonghaseyo)": "Hello (formal)",
-            "감사합니다 (gamsahamnida)": "Thank you (formal)",
-            "이거 얼마예요? (igeo eolmayeyo?)": "How much is this?",
-            "화장실 어디예요? (hwajangsil eodiyeyo?)": "Where is the bathroom?",
-            "도와주세요 (dowajuseyo)": "Please help me",
-            "한국어 못해요 (hangugeo mothaeyo)": "I can't speak Korean",
-            "메뉴판 주세요 (menyupan juseyo)": "Please give me the menu",
-            "계산해 주세요 (gyesanhae juseyo)": "Bill/check please",
-            "여기요! (yeogiyo!)": "Excuse me! (to call staff)",
-            "매워요? (maewoyo?)": "Is it spicy?",
-        }
-        for kr, en in phrases.items():
-            st.markdown(f"**{kr}** — {en}")
+        phrases = [
+            ("안녕하세요", "annyeonghaseyo", "Hello (formal)"),
+            ("감사합니다", "gamsahamnida", "Thank you (formal)"),
+            ("이거 얼마예요?", "igeo eolmayeyo?", "How much is this?"),
+            ("화장실 어디예요?", "hwajangsil eodiyeyo?", "Where is the bathroom?"),
+            ("도와주세요", "dowajuseyo", "Please help me"),
+            ("한국어 못해요", "hangugeo mothaeyo", "I can't speak Korean"),
+            ("메뉴판 주세요", "menyupan juseyo", "Menu please"),
+            ("계산해 주세요", "gyesanhae juseyo", "Bill please"),
+            ("여기요!", "yeogiyo!", "Excuse me! (to call staff)"),
+            ("매워요?", "maewoyo?", "Is it spicy?"),
+        ]
+        for kr, roman, en in phrases:
+            st.markdown(f"""
+            <div class="phrase-row">
+                <div>
+                    <span class="phrase-kr">{kr}</span>
+                    <span style="color: var(--text-muted); font-size: 0.78rem; margin-left: 8px;">({roman})</span>
+                </div>
+                <span class="phrase-en">{en}</span>
+            </div>
+            """, unsafe_allow_html=True)
 
 
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-# MODULE 3: SMART GROCERY PLANNER
+# MODULE 3: GROCERY PLANNER
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 with tab_grocery:
-    st.markdown("##### Plan your weekly groceries on a budget 🛒")
+    st.markdown('<div class="section-label">Weekly Grocery Planning</div>', unsafe_allow_html=True)
+
+    # Budget stat cards
+    st.markdown("""
+    <div class="stat-row">
+        <div class="stat-card">
+            <div class="num">₩25K</div>
+            <div class="label">Avg Student / Week</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">₩40K</div>
+            <div class="label">Comfortable / Week</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">🏪</div>
+            <div class="label">Korea Store Prices</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
     col1, col2 = st.columns(2)
 
@@ -289,9 +691,7 @@ with tab_grocery:
             max_value=500000,
             value=30000,
             step=5000,
-            help="Average student spends ₩25,000–40,000/week on groceries",
         )
-
         household_size = st.selectbox(
             "👥 Cooking for",
             ["Just me", "2 people", "3-4 people"],
@@ -300,18 +700,9 @@ with tab_grocery:
     with col2:
         dietary = st.multiselect(
             "🍽️ Dietary Requirements",
-            [
-                "Halal",
-                "Vegetarian",
-                "Vegan",
-                "No pork",
-                "No seafood",
-                "Gluten-free",
-                "No spicy food",
-            ],
+            ["Halal", "Vegetarian", "Vegan", "No pork", "No seafood", "Gluten-free", "No spicy food"],
             default=[],
         )
-
         cooking_level = st.select_slider(
             "👨‍🍳 Cooking skill",
             options=["Beginner", "Basic", "Intermediate", "Advanced"],
@@ -320,25 +711,17 @@ with tab_grocery:
 
     preferred_stores = st.multiselect(
         "🏪 Where do you usually shop?",
-        [
-            "E-Mart / Homeplus",
-            "GS25 / CU / 7-Eleven",
-            "Local market (시장)",
-            "Coupang (online)",
-            "Daiso",
-            "No Preference",
-        ],
+        ["E-Mart / Homeplus", "GS25 / CU / 7-Eleven", "Local market (시장)", "Coupang (online)", "Daiso", "No Preference"],
         default=["No Preference"],
     )
 
-    if st.button("📋 Generate Grocery Plan", type="primary", use_container_width=True):
+    if st.button("📋  Generate Grocery Plan", type="primary", use_container_width=True, key="grocery_btn"):
         if not groq_api_key:
             st.error("⚠️ Please enter your Groq API key in the sidebar.")
         else:
             with st.spinner("Planning your groceries..."):
                 try:
                     from groq import Groq
-
                     client = Groq(api_key=groq_api_key)
 
                     dietary_str = ", ".join(dietary) if dietary else "None"
@@ -355,29 +738,24 @@ Create a weekly grocery plan with these constraints:
 
 Provide:
 
-1. **Shopping List** — organized by category (produce, protein, staples, etc.)
+1. **🛒 Shopping List** — organized by category (produce, protein, staples, etc.)
    - Item name in English AND Korean (한글)
    - Estimated price in ₩
-   - Where to buy (which store type is cheapest for this item)
+   - Where to buy (cheapest store for this item)
 
-2. **3 Simple Meal Ideas** — using the ingredients from the list
-   - Quick description
-   - Approximate cooking time
+2. **🍳 3 Simple Meal Ideas** — using the listed ingredients
+   - Quick description + cooking time
 
-3. **Budget Breakdown** — total by category, remaining budget
+3. **💰 Budget Breakdown** — total by category, remaining budget
 
-4. **Money-Saving Tips** — 2-3 Korea-specific tips (e.g. "Buy rice in bulk at E-Mart", "Check Coupang Rocket Fresh for deals", "Local 시장 is cheapest for vegetables")
+4. **💡 Money-Saving Tips** — 2-3 Korea-specific tips
 
-Keep prices realistic for South Korea in 2026. Use real store names and real product availability.
-Format clearly with headers and bullet points."""
+Keep prices realistic for South Korea in 2026. Use real store names."""
 
                     response = client.chat.completions.create(
                         model="llama-3.3-70b-versatile",
                         messages=[
-                            {
-                                "role": "system",
-                                "content": "You are a helpful grocery planning assistant with deep knowledge of South Korean grocery stores, prices, and food culture. You help foreigners shop smart on a budget.",
-                            },
+                            {"role": "system", "content": "You are a helpful grocery planning assistant with deep knowledge of South Korean grocery stores, prices, and food culture. You help foreigners shop smart on a budget."},
                             {"role": "user", "content": grocery_prompt},
                         ],
                         temperature=0.7,
@@ -386,24 +764,23 @@ Format clearly with headers and bullet points."""
                     result = response.choices[0].message.content
                     st.markdown(result)
                 except Exception as e:
-                    st.error(f"Error generating plan: {e}")
+                    st.error(f"Error: {e}")
 
-    # Helpful info
     with st.expander("🏪 Guide to Korean Grocery Stores"):
         st.markdown("""
 **Budget-Friendly Options:**
-- **Local markets (시장)** — Cheapest for fresh produce, meat, and fish
-- **E-Mart / Homeplus** — Best for bulk buying rice, cooking oil, staples
+- **Local markets (시장)** — Cheapest for fresh produce, meat, fish
+- **E-Mart / Homeplus** — Best for bulk buying rice, oil, staples
 - **Coupang Rocket Fresh** — Convenient delivery, good for heavy items
 - **No Brand (노브랜드)** — E-Mart's budget line, great value
 
 **Convenience Stores (편의점):**
-- GS25, CU, 7-Eleven — Good for quick meals, snacks
-- Triangle kimbap (삼각김밥) = ~₩1,200, full meal
-- Cup ramen + rice = ~₩2,500
+- GS25, CU, 7-Eleven — Quick meals & snacks
+- Triangle kimbap (삼각김밥) ≈ ₩1,200
+- Cup ramen + rice ≈ ₩2,500
 
-**For Halal/International Food:**
-- Itaewon (이태원) — Halal butchers and restaurants
-- Ansan Multicultural Food Street — international ingredients
-- Coupang search "할랄" (halal) — some options available online
+**Halal / International Food:**
+- Itaewon (이태원) — Halal butchers & restaurants
+- Ansan Multicultural Food Street
+- Coupang search "할랄" (halal) for online options
 """)
