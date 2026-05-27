@@ -422,14 +422,6 @@ st.markdown("""
     <div class="hero-badge">🇰🇷 AI-Powered Assistant</div>
     <h1>Meet your <span class="highlight">K-Friend</span></h1>
     <p>Navigate life in South Korea with confidence. Chat about visas, translate anything,<br>plan groceries, read Korean signs, and simplify job postings — all in one place.</p>
-    <div style="margin-top: 1rem;">
-        <span class="feature-pill">💬 Chatbot</span>
-        <span class="feature-pill">🌐 Translation</span>
-        <span class="feature-pill">🛒 Grocery Planning</span>
-        <span class="feature-pill">📸 Sign Reader</span>
-        <span class="feature-pill">💼 Job Simplifier</span>
-        <span class="feature-pill">🇰🇷 Korea Expert</span>
-    </div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -803,27 +795,17 @@ Keep prices realistic for South Korea in 2026. Use real store names."""
 with tab_sign:
     st.markdown('<div class="section-label">Korean Sign & Menu Photo Reader</div>', unsafe_allow_html=True)
 
-    st.markdown("""
-    <div class="stat-row">
-        <div class="stat-card">
-            <div class="num">📸</div>
-            <div class="label">Upload Any Photo</div>
-        </div>
-        <div class="stat-card">
-            <div class="num">🔍</div>
-            <div class="label">OCR Text Extraction</div>
-        </div>
-        <div class="stat-card">
-            <div class="num">🌐</div>
-            <div class="label">Instant Translation</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown("Upload a photo of any Korean text — a street sign, restaurant menu, product label, notice, or document — and get an instant English translation.")
 
-    st.markdown("""
-    Upload a photo of any Korean text — a street sign, restaurant menu, product label,
-    notice, or document — and get an instant English translation.
-    """)
+    st.markdown("")
+    sc1, sc2, sc3 = st.columns(3)
+    with sc1:
+        st.markdown("📸 **Step 1**\n\nUpload a photo")
+    with sc2:
+        st.markdown("🔍 **Step 2**\n\nOCR extracts text")
+    with sc3:
+        st.markdown("🌐 **Step 3**\n\nInstant translation")
+    st.markdown("---")
 
     uploaded_image = st.file_uploader(
         "📷 Upload a photo with Korean text",
@@ -901,26 +883,14 @@ Extracted text:
                             st.error(f"Error: {e}")
 
     else:
-        st.markdown("""
-        <div class="quick-grid">
-            <div class="quick-card">
-                <div class="emoji">🍜</div>
-                <div class="title">Restaurant menus</div>
-            </div>
-            <div class="quick-card">
-                <div class="emoji">🚏</div>
-                <div class="title">Street signs & directions</div>
-            </div>
-            <div class="quick-card">
-                <div class="emoji">📦</div>
-                <div class="title">Product labels & ingredients</div>
-            </div>
-            <div class="quick-card">
-                <div class="emoji">📋</div>
-                <div class="title">Notices & documents</div>
-            </div>
-        </div>
-        """, unsafe_allow_html=True)
+        st.markdown("")
+        qc1, qc2 = st.columns(2)
+        with qc1:
+            st.markdown("🍜 **Restaurant menus**")
+            st.markdown("📦 **Product labels & ingredients**")
+        with qc2:
+            st.markdown("🚏 **Street signs & directions**")
+            st.markdown("📋 **Notices & documents**")
 
     with st.expander("💡 Tips for Best Results"):
         st.markdown("""
@@ -938,27 +908,17 @@ Extracted text:
 with tab_job:
     st.markdown('<div class="section-label">Job Posting Simplifier</div>', unsafe_allow_html=True)
 
-    st.markdown("""
-    <div class="stat-row">
-        <div class="stat-card">
-            <div class="num">💼</div>
-            <div class="label">Paste Korean Job Ad</div>
-        </div>
-        <div class="stat-card">
-            <div class="num">🔄</div>
-            <div class="label">Auto Translation</div>
-        </div>
-        <div class="stat-card">
-            <div class="num">📋</div>
-            <div class="label">Simple Summary</div>
-        </div>
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown("Paste a Korean part-time job posting (from Albamon, Saramin, or any site) and get a clear, simple English summary with all the key details extracted.")
 
-    st.markdown("""
-    Paste a Korean part-time job posting (from Albamon, Saramin, or any site) and get a
-    clear, simple English summary with all the key details extracted.
-    """)
+    st.markdown("")
+    jc1, jc2, jc3 = st.columns(3)
+    with jc1:
+        st.markdown("💼 **Step 1**\n\nPaste Korean job ad")
+    with jc2:
+        st.markdown("🔄 **Step 2**\n\nAuto translation")
+    with jc3:
+        st.markdown("📋 **Step 3**\n\nSimple summary")
+    st.markdown("---")
 
     job_input = st.text_area(
         "📋 Paste Korean job posting here",
