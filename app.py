@@ -395,6 +395,14 @@ with st.sidebar:
                 <span style="font-size: 1.1rem;">🛒</span>
                 <span style="font-size: 0.85rem; font-weight: 500;">Grocery Planner</span>
             </div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                <span style="font-size: 1.1rem;">📸</span>
+                <span style="font-size: 0.85rem; font-weight: 500;">Sign Reader</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; padding: 8px 12px; background: rgba(255,255,255,0.05); border-radius: 8px;">
+                <span style="font-size: 1.1rem;">💼</span>
+                <span style="font-size: 0.85rem; font-weight: 500;">Job Simplifier</span>
+            </div>
         </div>
     </div>
     """, unsafe_allow_html=True)
@@ -413,11 +421,13 @@ st.markdown("""
 <div class="hero">
     <div class="hero-badge">🇰🇷 AI-Powered Assistant</div>
     <h1>Meet your <span class="highlight">K-Friend</span></h1>
-    <p>Navigate life in South Korea with confidence. Get instant answers about<br>visas, translate anything, and plan groceries — all in one place.</p>
+    <p>Navigate life in South Korea with confidence. Chat about visas, translate anything,<br>plan groceries, read Korean signs, and simplify job postings — all in one place.</p>
     <div style="margin-top: 1rem;">
         <span class="feature-pill">💬 Chatbot</span>
         <span class="feature-pill">🌐 Translation</span>
         <span class="feature-pill">🛒 Grocery Planning</span>
+        <span class="feature-pill">📸 Sign Reader</span>
+        <span class="feature-pill">💼 Job Simplifier</span>
         <span class="feature-pill">🇰🇷 Korea Expert</span>
     </div>
 </div>
@@ -425,10 +435,12 @@ st.markdown("""
 
 
 # ─── Tabs ──────────────────────────────────────────────────────
-tab_chat, tab_translate, tab_grocery = st.tabs([
+tab_chat, tab_translate, tab_grocery, tab_sign, tab_job = st.tabs([
     "💬  K-Friend Chat",
     "🌐  Translator",
     "🛒  Grocery Planner",
+    "📸  Sign Reader",
+    "💼  Job Simplifier",
 ])
 
 
@@ -783,4 +795,296 @@ Keep prices realistic for South Korea in 2026. Use real store names."""
 - Itaewon (이태원) — Halal butchers & restaurants
 - Ansan Multicultural Food Street
 - Coupang search "할랄" (halal) for online options
+""")
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# MODULE 4: KOREAN SIGN & MENU PHOTO READER
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+with tab_sign:
+    st.markdown('<div class="section-label">Korean Sign & Menu Photo Reader</div>', unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="stat-row">
+        <div class="stat-card">
+            <div class="num">📸</div>
+            <div class="label">Upload Any Photo</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">🔍</div>
+            <div class="label">OCR Text Extraction</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">🌐</div>
+            <div class="label">Instant Translation</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    Upload a photo of any Korean text — a street sign, restaurant menu, product label,
+    notice, or document — and get an instant English translation.
+    """)
+
+    uploaded_image = st.file_uploader(
+        "📷 Upload a photo with Korean text",
+        type=["jpg", "jpeg", "png", "webp"],
+        help="Take a photo of any Korean sign, menu, label, or notice",
+    )
+
+    if uploaded_image:
+        col_img, col_result = st.columns([1, 1])
+
+        with col_img:
+            st.image(uploaded_image, caption="Uploaded Image", use_container_width=True)
+
+        with col_result:
+            if st.button("🔍  Extract & Translate", type="primary", use_container_width=True, key="ocr_btn"):
+                if not groq_api_key:
+                    st.error("⚠️ Please enter your Groq API key in the sidebar.")
+                else:
+                    with st.spinner("Reading Korean text..."):
+                        try:
+                            import easyocr
+                            import numpy as np
+                            from PIL import Image
+                            import io
+
+                            # Load image
+                            image_bytes = uploaded_image.getvalue()
+                            image = Image.open(io.BytesIO(image_bytes))
+                            image_np = np.array(image)
+
+                            # Run EasyOCR
+                            reader = easyocr.Reader(["ko", "en"], gpu=False)
+                            results = reader.readtext(image_np)
+
+                            if not results:
+                                st.warning("No text detected in the image. Try a clearer photo.")
+                            else:
+                                # Extract text
+                                detected_texts = [text for (_, text, conf) in results]
+                                full_text = "\n".join(detected_texts)
+
+                                st.markdown("**📝 Detected Text (Korean):**")
+                                st.code(full_text, language=None)
+
+                                # Translate using Groq
+                                with st.spinner("Translating..."):
+                                    from groq import Groq
+                                    client = Groq(api_key=groq_api_key)
+
+                                    translate_prompt = f"""I extracted the following Korean text from a photo (it could be a sign, menu, product label, or notice). Please:
+
+1. **Clean Text**: Fix any OCR errors and show the corrected Korean text
+2. **Translation**: Translate everything to English
+3. **Context**: Briefly explain what this is (menu item? warning sign? product label?) and any useful context for a foreigner
+
+Extracted text:
+{full_text}"""
+
+                                    response = client.chat.completions.create(
+                                        model="llama-3.3-70b-versatile",
+                                        messages=[
+                                            {"role": "system", "content": "You are a Korean-English translator helping foreigners understand Korean text from photos. Fix OCR errors, translate accurately, and provide helpful context."},
+                                            {"role": "user", "content": translate_prompt},
+                                        ],
+                                        temperature=0.3,
+                                        max_tokens=800,
+                                    )
+                                    translation = response.choices[0].message.content
+                                    st.markdown("**🌐 Translation & Context:**")
+                                    st.markdown(translation)
+
+                        except ImportError:
+                            st.error("EasyOCR is not installed. Add `easyocr` to requirements.txt and redeploy.")
+                        except Exception as e:
+                            st.error(f"Error: {e}")
+
+    else:
+        st.markdown("""
+        <div class="quick-grid">
+            <div class="quick-card">
+                <div class="emoji">🍜</div>
+                <div class="title">Restaurant menus</div>
+            </div>
+            <div class="quick-card">
+                <div class="emoji">🚏</div>
+                <div class="title">Street signs & directions</div>
+            </div>
+            <div class="quick-card">
+                <div class="emoji">📦</div>
+                <div class="title">Product labels & ingredients</div>
+            </div>
+            <div class="quick-card">
+                <div class="emoji">📋</div>
+                <div class="title">Notices & documents</div>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with st.expander("💡 Tips for Best Results"):
+        st.markdown("""
+- **Good lighting** — avoid shadows and glare
+- **Straight angle** — hold camera parallel to the text
+- **Close up** — make sure text is large and readable in the photo
+- **One item at a time** — focus on one sign/menu/label per photo
+- Works with: menus, signs, product labels, notices, receipts, subway maps
+""")
+
+
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+# MODULE 5: JOB POSTING SIMPLIFIER
+# ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+with tab_job:
+    st.markdown('<div class="section-label">Job Posting Simplifier</div>', unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="stat-row">
+        <div class="stat-card">
+            <div class="num">💼</div>
+            <div class="label">Paste Korean Job Ad</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">🔄</div>
+            <div class="label">Auto Translation</div>
+        </div>
+        <div class="stat-card">
+            <div class="num">📋</div>
+            <div class="label">Simple Summary</div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown("""
+    Paste a Korean part-time job posting (from Albamon, Saramin, or any site) and get a
+    clear, simple English summary with all the key details extracted.
+    """)
+
+    job_input = st.text_area(
+        "📋 Paste Korean job posting here",
+        height=180,
+        placeholder="알바몬, 사람인, 잡코리아 등에서 복사한 채용공고를 여기에 붙여넣으세요...\n\nPaste the full Korean job posting text here...",
+    )
+
+    col_j1, col_j2 = st.columns(2)
+    with col_j1:
+        check_work_rights = st.checkbox(
+            "🎓 Check student work rules",
+            value=True,
+            help="Adds D-2 visa work hour limits and compliance info",
+        )
+    with col_j2:
+        simple_mode = st.checkbox(
+            "📝 Extra simple English",
+            value=False,
+            help="Uses very basic English for beginner speakers",
+        )
+
+    if st.button("📋  Simplify Job Posting", type="primary", use_container_width=True, key="job_btn"):
+        if not job_input.strip():
+            st.warning("Please paste a Korean job posting first.")
+        elif not groq_api_key:
+            st.error("⚠️ Please enter your Groq API key in the sidebar.")
+        else:
+            with st.spinner("Translating and simplifying..."):
+                try:
+                    from groq import Groq
+                    client = Groq(api_key=groq_api_key)
+
+                    language_note = "Use very simple English words (A1-A2 level). Short sentences. No complex vocabulary." if simple_mode else ""
+                    work_rights_note = """
+Also add a section called "⚠️ Student Work Rules (D-2 Visa)" that checks:
+- Does this job seem to exceed 20 hours/week during semester? (D-2 limit)
+- Is the hourly pay at or above minimum wage? (2026 Korean minimum wage is ₩10,030/hour)
+- Any red flags (no contract mentioned, cash payment, unusually long hours)?
+""" if check_work_rights else ""
+
+                    job_prompt = f"""You are a job posting translator and simplifier for foreigners in South Korea.
+
+A foreigner has pasted a Korean job posting. Your job:
+
+1. **📋 Job Summary** — Extract and present clearly:
+   - Job title (Korean + English)
+   - Company / Location
+   - Pay (hourly/monthly, in ₩ and approximate USD)
+   - Working hours & days
+   - Job duties (simplified)
+   - Requirements (Korean level, experience, etc.)
+   - How to apply (phone, email, app)
+
+2. **🔑 Key Phrases to Know** — List 3-5 Korean words/phrases from the posting that the applicant should know (with pronunciation and meaning)
+
+3. **⚡ Quick Verdict** — In 1-2 sentences: is this a reasonable job for a foreign student? Any concerns?
+
+{work_rights_note}
+
+{language_note}
+
+Korean job posting:
+{job_input}"""
+
+                    response = client.chat.completions.create(
+                        model="llama-3.3-70b-versatile",
+                        messages=[
+                            {"role": "system", "content": "You are an expert at translating and simplifying Korean job postings for foreigners. You know Korean labor law, minimum wage, and D-2 visa work restrictions. Be helpful, accurate, and flag any concerns."},
+                            {"role": "user", "content": job_prompt},
+                        ],
+                        temperature=0.4,
+                        max_tokens=1200,
+                    )
+                    result = response.choices[0].message.content
+                    st.markdown(result)
+
+                except Exception as e:
+                    st.error(f"Error: {e}")
+
+    # Sample job posting for demo
+    with st.expander("📌 Try a Sample Job Posting"):
+        sample_job = """[알바몬] 편의점 야간 알바 모집
+
+근무지: 서울특별시 관악구 신림동 CU 편의점
+시급: 10,030원 (주휴수당 별도)
+근무시간: 22:00 ~ 06:00 (주 5일)
+근무기간: 3개월 이상
+모집인원: 1명
+
+자격요건:
+- 외국인 가능 (의사소통 가능자)
+- 성별 무관
+- 경험 무관 (초보 가능)
+
+우대사항:
+- 편의점 근무 경험자
+- 한국어 능통자
+
+지원방법: 전화 문의 010-XXXX-XXXX
+담당자: 김OO 점장"""
+
+        st.code(sample_job, language=None)
+        if st.button("▶ Use this sample", key="use_sample"):
+            st.session_state["job_sample_loaded"] = sample_job
+            st.rerun()
+
+    # Load sample if button was pressed
+    if "job_sample_loaded" in st.session_state and not job_input:
+        st.info("👆 The sample has been loaded. Scroll up and click 'Simplify Job Posting' to try it!")
+
+    with st.expander("🔍 Where to Find Korean Job Postings"):
+        st.markdown("""
+**Popular Job Sites:**
+- **알바몬 (Albamon)** — albamon.com — Largest part-time job site
+- **알바천국 (Alba Cheounguk)** — alba.co.kr — "Part-time heaven"
+- **사람인 (Saramin)** — saramin.co.kr — Full-time & part-time
+- **잡코리아 (JobKorea)** — jobkorea.co.kr — Professional jobs
+
+**For Foreigners Specifically:**
+- **Seoul Global Center** — sgc.seoul.go.kr — Job support for foreigners
+- **HiKorea** — hikorea.go.kr — Work permit information
+- **KDU Career Center** — Check with your university
+
+**Tips:**
+- Always check if the job allows foreign workers (외국인 가능)
+- D-2 visa: max 20 hours/week during semester, unlimited during breaks
+- Minimum wage 2026: ₩10,030/hour — don't accept less
+- Always get a written contract (근로계약서)
 """)
