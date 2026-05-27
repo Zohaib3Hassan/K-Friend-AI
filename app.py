@@ -13,12 +13,36 @@ st.markdown("""
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
 
-/* Apply font to everything EXCEPT Streamlit's icon elements */
-body, p, h1, h2, h3, h4, h5, h6, span, div, input, textarea, button, label, a, li, td, th,
-[data-testid="stMarkdownContainer"], [data-testid="stChatMessage"],
-.stTextInput, .stTextArea, .stButton, .stSelectbox, .stMultiSelect,
-.stRadio, .stCheckbox, .stNumberInput, .stCaption, .stAlert {
-    font-family: 'Plus Jakarta Sans', sans-serif !important;
+html, body,
+.stApp,
+[data-testid="stMarkdownContainer"],
+[data-testid="stMarkdownContainer"] p,
+[data-testid="stMarkdownContainer"] li,
+[data-testid="stMarkdownContainer"] strong,
+[data-testid="stMarkdownContainer"] em,
+[data-testid="stMarkdownContainer"] a,
+h1, h2, h3, h4, h5, h6,
+label,
+input,
+textarea,
+button,
+.stTabs [data-baseweb="tab"] p,
+.sidebar-logo,
+.sidebar-title,
+.sidebar-subtitle,
+.module-chip,
+.hero,
+.hero-badge,
+.hero h1,
+.hero p,
+.hero-panel,
+.quick-card,
+.trust-pill,
+.sec-label,
+.module-head,
+.module-head h2,
+.module-head p {
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 :root {
@@ -211,11 +235,24 @@ label, .stRadio, .stCheckbox, .stSelectbox, .stMultiSelect, .stNumberInput {
 
 /* Multiselect pills */
 [data-baseweb="tag"] {
-    background: var(--primary-soft) !important;
+    background: var(--primary-light) !important;
     color: var(--primary-dark) !important;
     border-radius: 20px !important;
     font-weight: 500 !important;
 }
+
+/* Info cards */
+.info-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-md);
+    padding: 1.2rem;
+    text-align: center;
+    box-shadow: var(--shadow-sm);
+}
+.info-card .ic-emoji { font-size: 1.5rem; margin-bottom: 0.4rem; }
+.info-card .ic-title { font-size: 0.85rem; font-weight: 700; color: var(--text-primary); }
+.info-card .ic-sub { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
 
 /* Hero */
 .hero {
@@ -363,6 +400,13 @@ label, .stRadio, .stCheckbox, .stSelectbox, .stMultiSelect, .stNumberInput {
     border: 1px solid rgba(13,147,115,0.16);
     font-size: 1.35rem;
 }
+.surface {
+    background: rgba(255,255,255,0.7);
+    border: 1px solid var(--border-light);
+    border-radius: var(--radius-lg);
+    padding: 1rem;
+    box-shadow: var(--shadow-sm);
+}
 .stAlert {
     border-radius: var(--radius-md) !important;
 }
@@ -375,13 +419,17 @@ label, .stRadio, .stCheckbox, .stSelectbox, .stMultiSelect, .stNumberInput {
     border-radius: var(--radius-md) !important;
     padding: 1rem !important;
 }
+.stFileUploader [data-testid="stFileUploaderDropzone"] button {
+    border-radius: var(--radius-sm) !important;
+    min-height: 2.5rem !important;
+}
 .stTextArea textarea {
     min-height: 150px !important;
     line-height: 1.55 !important;
 }
 
 /* Hide defaults */
-#MainMenu, header, footer { visibility: hidden; }
+#MainMenu, header, footer, [data-testid="stHeader"] { display: none !important; }
 
 @media (max-width: 768px) {
     [data-testid="stMainBlockContainer"], .main .block-container { padding: 0.75rem 0.85rem 2rem 0.85rem; }
@@ -497,8 +545,11 @@ Your expertise: Visa & Immigration (D-2, E-7, F-2/F-5, KIIP, ARC), Daily Life (b
 Rules: Be friendly and supportive. Give specific actionable answers. Include Korean (한글) + English for Korean terms. Mention costs in ₩. If unsure, suggest hikorea.go.kr or 1345 hotline. Use simple English."""
 
 with tab_chat:
-    module_header("💬", "K-Friend Chat",
-        "Ask practical questions about visas, banking, transport, food, healthcare, culture, and student life in South Korea.")
+    module_header(
+        "💬",
+        "K-Friend Chat",
+        "Ask practical questions about visas, banking, transport, food, healthcare, culture, and student life in South Korea.",
+    )
 
     if "chat_messages" not in st.session_state:
         st.session_state.chat_messages = []
@@ -551,8 +602,11 @@ with tab_chat:
 # MODULE 2: TRANSLATOR
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 with tab_translate:
-    module_header("🌐", "Translator",
-        "Translate between English and Korean with natural wording, romanization, speech level, and quick cultural context.")
+    module_header(
+        "🌐",
+        "Translator",
+        "Translate between English and Korean with natural wording, romanization, speech level, and quick cultural context.",
+    )
 
     col_l, col_r = st.columns([1, 1])
     with col_l:
@@ -615,8 +669,11 @@ Provide: 1. **Translation** 2. **Speech level** (formal 존댓말 or casual 반�
 # MODULE 3: GROCERY PLANNER
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 with tab_grocery:
-    module_header("🛒", "Grocery Planner",
-        "Build a realistic weekly shopping plan using your budget, cooking skill, dietary needs, and preferred Korean stores.")
+    module_header(
+        "🛒",
+        "Grocery Planner",
+        "Build a realistic weekly shopping plan using your budget, cooking skill, dietary needs, and preferred Korean stores.",
+    )
 
     c1, c2 = st.columns(2)
     with c1:
@@ -679,8 +736,11 @@ Use realistic 2026 South Korea prices and real store names."""
 # MODULE 4: SIGN READER
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 with tab_sign:
-    module_header("📸", "Sign Reader",
-        "Upload a Korean menu, sign, label, or notice. K-Friend extracts the text and explains what it means in English.")
+    module_header(
+        "📸",
+        "Sign Reader",
+        "Upload a Korean menu, sign, label, or notice. K-Friend extracts the text and explains what it means in English.",
+    )
 
     uploaded_image = st.file_uploader("📷 Upload a photo with Korean text",
         type=["jpg", "jpeg", "png", "webp"],
@@ -757,8 +817,11 @@ Extracted text:
 # MODULE 5: JOB SIMPLIFIER
 # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 with tab_job:
-    module_header("💼", "Job Simplifier",
-        "Paste a Korean part-time job post and get a simple English summary with pay, hours, red flags, and student visa checks.")
+    module_header(
+        "💼",
+        "Job Simplifier",
+        "Paste a Korean part-time job post and get a simple English summary with pay, hours, red flags, and student visa checks.",
+    )
 
     job_input = st.text_area("📋 Paste Korean job posting here", height=180,
         placeholder="알바몬, 사람인, 잡코리아 등에서 복사한 채용공고를 여기에 붙여넣으세요...\n\nPaste the full Korean job posting text here...")
