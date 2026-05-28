@@ -1,12 +1,4 @@
-No, you do **not** need to change anything in Streamlit Secrets if the secret name is exactly:
 
-```toml
-GROQ_API_KEY = "your_groq_key_here"
-```
-
-The code below automatically reads that secret. Replace your whole `app.py` with this:
-
-```python
 import streamlit as st
 
 # ─── Page Config ───────────────────────────────────────────────
