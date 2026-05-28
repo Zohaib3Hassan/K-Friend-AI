@@ -1,3 +1,12 @@
+No, you do **not** need to change anything in Streamlit Secrets if the secret name is exactly:
+
+```toml
+GROQ_API_KEY = "your_groq_key_here"
+```
+
+The code below automatically reads that secret. Replace your whole `app.py` with this:
+
+```python
 import streamlit as st
 
 # ─── Page Config ───────────────────────────────────────────────
@@ -23,9 +32,9 @@ html, body,
 [data-testid="stMarkdownContainer"] a,
 h1, h2, h3, h4, h5, h6,
 label,
-input,
+input:not([class*="stIconMaterial"]):not([class*="material-symbols-rounded"]):not([class*="material-icons"]),
 textarea,
-button,
+button:not([class*="stIconMaterial"]):not([class*="material-symbols-rounded"]):not([class*="material-icons"]),
 .stTabs [data-baseweb="tab"] p,
 .sidebar-logo,
 .sidebar-title,
@@ -43,6 +52,24 @@ button,
 .module-head h2,
 .module-head p {
     font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+[data-testid="stIconMaterial"],
+.stIconMaterial,
+.material-symbols-rounded,
+.material-icons {
+    font-family: 'Material Symbols Rounded', 'Material Icons' !important;
+    font-weight: normal !important;
+    font-style: normal !important;
+    line-height: 1 !important;
+    letter-spacing: normal !important;
+    text-transform: none !important;
+    white-space: nowrap !important;
+    word-wrap: normal !important;
+    direction: ltr !important;
+    font-feature-settings: 'liga' !important;
+    -webkit-font-feature-settings: 'liga' !important;
+    -webkit-font-smoothing: antialiased !important;
 }
 
 :root {
@@ -467,13 +494,7 @@ with st.sidebar:
     """, unsafe_allow_html=True)
     st.divider()
 
-    groq_api_key = st.text_input("🔑 Groq API Key", type="password", placeholder="gsk_...",
-        help="Get your free key at console.groq.com/keys")
-
-    if groq_api_key:
-        st.success("✓ API key set", icon="✅")
-    else:
-        st.info("Enter your free Groq API key to start", icon="🔑")
+    groq_api_key = st.secrets.get("GROQ_API_KEY", "")
 
     st.divider()
     st.markdown("**Modules**")
@@ -903,3 +924,4 @@ Job posting:
 
 **Tips:** Check for 외국인 가능 (foreigners OK) · D-2 visa: max 20hrs/week during semester · Minimum wage 2026: ₩10,030/hr · Always get a written contract (근로계약서)
 """)
+```
