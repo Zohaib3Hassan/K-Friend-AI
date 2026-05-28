@@ -916,4 +916,4 @@ Job posting:
 
 **Tips:** Check for 외국인 가능 (foreigners OK) · D-2 visa: max 20hrs/week during semester · Minimum wage 2026: ₩10,030/hr · Always get a written contract (근로계약서)
 """)
-```
+
